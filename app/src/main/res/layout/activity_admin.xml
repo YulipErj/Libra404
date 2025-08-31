@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:id="@+id/contentAdmin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:layout_centerInParent="true">
+
+        <TextView
+            android:id="@+id/tvGreetAdmin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Welcome Ma’am/Sir"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:paddingBottom="12dp"/>
+
+        <EditText
+            android:id="@+id/etTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Title"/>
+
+        <EditText
+            android:id="@+id/etAuthor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Author"
+            android:layout_marginTop="8dp"/>
+
+        <Button
+            android:id="@+id/btnAdd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Add Book"
+            android:layout_marginTop="8dp"/>
+
+        <EditText
+            android:id="@+id/etDeleteTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Title to delete"
+            android:layout_marginTop="16dp"/>
+
+        <Button
+            android:id="@+id/btnDelete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Delete Book"
+            android:layout_marginTop="8dp"/>
+
+        <Button
+            android:id="@+id/btnRefreshA"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Refresh List"
+            android:layout_marginTop="16dp"/>
+
+        <ListView
+            android:id="@+id/listBooksA"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="8dp"/>
+    </LinearLayout>
+</RelativeLayout>

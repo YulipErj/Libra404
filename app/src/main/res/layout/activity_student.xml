@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:id="@+id/contentStudent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:layout_centerInParent="true">
+
+        <TextView
+            android:id="@+id/tvGreetStudent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Welcome Classmate"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:paddingBottom="12dp"/>
+
+        <EditText
+            android:id="@+id/etBorrowTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Title to borrow"/>
+
+        <Button
+            android:id="@+id/btnBorrow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Borrow"
+            android:layout_marginTop="8dp"/>
+
+        <EditText
+            android:id="@+id/etReturnTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Title to return"
+            android:layout_marginTop="16dp"/>
+
+        <Button
+            android:id="@+id/btnReturn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Return"
+            android:layout_marginTop="8dp"/>
+
+        <Button
+            android:id="@+id/btnRefreshS"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Refresh List"
+            android:layout_marginTop="16dp"/>
+
+        <ListView
+            android:id="@+id/listBooksS"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="8dp"/>
+    </LinearLayout>
+</RelativeLayout>
