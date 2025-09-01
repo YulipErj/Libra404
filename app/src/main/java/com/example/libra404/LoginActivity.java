@@ -17,6 +17,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
         etUser = findViewById(R.id.etUser);
         etPass = findViewById(R.id.etPass);
         btnLogin = findViewById(R.id.btnLogin);
@@ -24,27 +25,24 @@ public class LoginActivity extends AppCompatActivity {
         db = new DatabaseHelper(this);
 
         btnLogin.setOnClickListener(v -> {
-            String u = etUser.getText().toString();
-            String p = etPass.getText().toString();
+            String u = etUser.getText().toString().trim();
+            String p = etPass.getText().toString().trim();
             String role = db.getRole(u, p);
+
             if (role == null) {
-                Toast.makeText(this,"Invalid login",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Invalid username or password", Toast.LENGTH_SHORT).show();
                 return;
             }
+
             if (role.equals("admin")) {
-                Intent i = new Intent(this, AdminActivity.class);
-                i.putExtra("name", u);
-                startActivity(i);
+                startActivity(new Intent(this, AdminActivity.class).putExtra("name", u));
+            } else if (role.equals("student")) {
+                startActivity(new Intent(this, StudentActivity.class).putExtra("name", u));
             } else {
-                Intent i = new Intent(this, StudentActivity.class);
-                i.putExtra("name", u);
-                startActivity(i);
+                Toast.makeText(this, "Unknown role", Toast.LENGTH_SHORT).show();
             }
         });
 
-        btnRegister.setOnClickListener(v -> {
-            Intent i = new Intent(this, RegisterActivity.class);
-            startActivity(i);
-        });
+        btnRegister.setOnClickListener(v -> startActivity(new Intent(this, RegisterActivity.class)));
     }
 }

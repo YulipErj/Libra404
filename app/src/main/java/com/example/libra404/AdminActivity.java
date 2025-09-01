@@ -1,11 +1,11 @@
 package com.example.libra404;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,78 +13,61 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 
 public class AdminActivity extends AppCompatActivity {
-    TextView tvGreet;
-    EditText etTitle, etAuthor, etDelete;
-    Button btnAdd, btnDelete, btnRefresh;
-    ListView listView;
-    ArrayAdapter<String> adapter;
+    EditText etTitle, etAuthor, etDeleteTitle;
+    Button btnAdd, btnDelete, btnRefresh, btnLogout;
+    ListView listBooks;
     DatabaseHelper db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin);
-        tvGreet = findViewById(R.id.tvGreetAdmin);
+
+        db = new DatabaseHelper(this);
+
         etTitle = findViewById(R.id.etTitle);
         etAuthor = findViewById(R.id.etAuthor);
-        etDelete = findViewById(R.id.etDeleteTitle);
+        etDeleteTitle = findViewById(R.id.etDeleteTitle);
         btnAdd = findViewById(R.id.btnAdd);
         btnDelete = findViewById(R.id.btnDelete);
         btnRefresh = findViewById(R.id.btnRefreshA);
-        listView = findViewById(R.id.listBooksA);
-        db = new DatabaseHelper(this);
-
-        String name = getIntent().getStringExtra("name");
-        tvGreet.setText("Welcome Ma’am/Sir");
+        btnLogout = findViewById(R.id.btnLogoutA); // <-- new logout button
+        listBooks = findViewById(R.id.listBooksA);
 
         btnAdd.setOnClickListener(v -> {
             String t = etTitle.getText().toString();
             String a = etAuthor.getText().toString();
-            if (t.isEmpty() || a.isEmpty()) {
-                Toast.makeText(this,"Enter title and author",Toast.LENGTH_SHORT).show();
-                return;
-            }
-            boolean ok = db.addBook(t,a);
-            if (ok) {
-                Toast.makeText(this,"Book added",Toast.LENGTH_SHORT).show();
-                etTitle.setText("");
-                etAuthor.setText("");
-                loadList();
+            if (db.addBook(t, a)) {
+                Toast.makeText(this, "Book added", Toast.LENGTH_SHORT).show();
+                loadBooks();
             } else {
-                Toast.makeText(this,"Failed or duplicate",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Failed to add book", Toast.LENGTH_SHORT).show();
             }
         });
 
         btnDelete.setOnClickListener(v -> {
-            String t = etDelete.getText().toString();
-            if (t.isEmpty()) {
-                Toast.makeText(this,"Enter title",Toast.LENGTH_SHORT).show();
-                return;
-            }
-            boolean ok = db.deleteBook(t);
-            if (ok) {
-                Toast.makeText(this,"Book deleted",Toast.LENGTH_SHORT).show();
-                etDelete.setText("");
-                loadList();
+            String t = etDeleteTitle.getText().toString();
+            if (db.deleteBook(t)) {
+                Toast.makeText(this, "Book deleted", Toast.LENGTH_SHORT).show();
+                loadBooks();
             } else {
-                Toast.makeText(this,"Not found",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Book not found", Toast.LENGTH_SHORT).show();
             }
         });
 
-        btnRefresh.setOnClickListener(v -> loadList());
+        btnRefresh.setOnClickListener(v -> loadBooks());
 
-        loadList();
+        btnLogout.setOnClickListener(v -> {
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
+        });
+
+        loadBooks();
     }
 
-    private void loadList() {
-        ArrayList<String> data = db.getAllBooks();
-        if (adapter == null) {
-            adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, data);
-            listView.setAdapter(adapter);
-        } else {
-            adapter.clear();
-            adapter.addAll(data);
-            adapter.notifyDataSetChanged();
-        }
+    private void loadBooks() {
+        ArrayList<String> list = db.getAllBooks();
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, list);
+        listBooks.setAdapter(adapter);
     }
 }

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DB_NAME = "libra404.db";
-    private static final int DB_VERSION = 1;
+    private static final int DB_VERSION = 2;
 
     public DatabaseHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -20,16 +20,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE books(id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT UNIQUE, author TEXT, isBorrowed INTEGER DEFAULT 0)");
         db.execSQL("CREATE TABLE users(id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT UNIQUE, password TEXT, role TEXT)");
-        ContentValues v1 = new ContentValues();
-        v1.put("username","admin");
-        v1.put("password","admin");
-        v1.put("role","admin");
-        db.insert("users",null,v1);
-        ContentValues v2 = new ContentValues();
-        v2.put("username","student");
-        v2.put("password","1234");
-        v2.put("role","student");
-        db.insert("users",null,v2);
+        db.execSQL("INSERT INTO users(username, password, role) VALUES('admin', 'admin123', 'admin')");
     }
 
     @Override
