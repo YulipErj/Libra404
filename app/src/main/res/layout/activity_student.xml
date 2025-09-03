@@ -22,11 +22,18 @@
             android:gravity="center"
             android:paddingBottom="12dp"/>
 
+        <SearchView
+            android:id="@+id/searchView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:queryHint="Search books"/>
+
         <EditText
             android:id="@+id/etBorrowTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Title to borrow"/>
+            android:hint="Title to borrow"
+            android:layout_marginTop="8dp"/>
 
         <Button
             android:id="@+id/btnBorrow"
@@ -62,7 +69,13 @@
             android:layout_height="200dp"
             android:layout_marginTop="8dp"/>
 
-        <!-- ✅ Logout button -->
+        <Button
+            android:id="@+id/btnHistory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="View History"
+            android:layout_marginTop="16dp"/>
+
         <Button
             android:id="@+id/btnLogoutS"
             android:layout_width="match_parent"
