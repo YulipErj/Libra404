@@ -27,6 +27,12 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(v -> {
             String u = etUser.getText().toString().trim();
             String p = etPass.getText().toString().trim();
+
+            if (u.isEmpty() || p.isEmpty()) {
+                Toast.makeText(this, "Please enter username and password", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             String role = db.getRole(u, p);
 
             if (role == null) {

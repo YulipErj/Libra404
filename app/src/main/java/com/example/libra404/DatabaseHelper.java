@@ -1,10 +1,10 @@
 package com.example.libra404;
 
-import android.content.Context;
-import android.database.sqlite.SQLiteOpenHelper;
-import android.database.sqlite.SQLiteDatabase;
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.ArrayList;
 
@@ -43,14 +43,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public boolean deleteBook(String title) {
         SQLiteDatabase db = getWritableDatabase();
-        int r = db.delete("books","title = ?", new String[]{title.trim()});
+        int r = db.delete("books", "title = ?", new String[]{title.trim()});
         return r > 0;
     }
 
     public boolean borrowBook(String title, String student, String borrowDate, String dueDate) {
         SQLiteDatabase db = getWritableDatabase();
         Cursor c = db.rawQuery("SELECT isBorrowed FROM books WHERE title = ?", new String[]{title.trim()});
-        if (!c.moveToFirst()) { c.close(); return false; }
+        if (!c.moveToFirst()) {
+            c.close();
+            return false;
+        }
         int b = c.getInt(0);
         c.close();
         if (b == 1) return false;
@@ -69,10 +72,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return false;
     }
 
-    public boolean returnBook(String title) {
+    public boolean returnBook(String title, String returnDate) {
         SQLiteDatabase db = getWritableDatabase();
         Cursor c = db.rawQuery("SELECT isBorrowed FROM books WHERE title = ?", new String[]{title.trim()});
-        if (!c.moveToFirst()) { c.close(); return false; }
+        if (!c.moveToFirst()) {
+            c.close();
+            return false;
+        }
         int b = c.getInt(0);
         c.close();
         if (b == 0) return false;
@@ -80,35 +86,43 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         v.put("isBorrowed", 0);
         int r = db.update("books", v, "title = ?", new String[]{title.trim()});
         if (r > 0) {
-            db.execSQL("UPDATE borrow_history SET return_date = date('now') WHERE book = ? AND return_date IS NULL", new String[]{title.trim()});
+            db.execSQL("UPDATE borrow_history SET return_date = ? WHERE book = ? AND return_date IS NULL", new String[]{returnDate, title.trim()});
             return true;
         }
         return false;
     }
 
-    public ArrayList<String> getAllBooks() {
-        ArrayList<String> list = new ArrayList<>();
+    public ArrayList<Book> getAllBooks() {
+        ArrayList<Book> list = new ArrayList<>();
         SQLiteDatabase db = getReadableDatabase();
         Cursor c = db.rawQuery("SELECT title, author, isBorrowed FROM books ORDER BY title", null);
         while (c.moveToNext()) {
             String t = c.getString(0);
             String a = c.getString(1);
             int b = c.getInt(2);
-            String s = b==1 ? "Borrowed" : "Available";
-            list.add(t + " • " + a + " • " + s);
+            list.add(new Book(t, a, b == 1));
         }
         c.close();
         return list;
     }
 
-    public Cursor searchBooks(String keyword) {
+    public ArrayList<Book> searchBooksToList(String keyword) {
+        ArrayList<Book> list = new ArrayList<>();
         SQLiteDatabase db = getReadableDatabase();
-        return db.rawQuery("SELECT title, author, isBorrowed FROM books WHERE title LIKE ? OR author LIKE ? ORDER BY title",
+        Cursor c = db.rawQuery("SELECT title, author, isBorrowed FROM books WHERE title LIKE ? OR author LIKE ? ORDER BY title",
                 new String[]{"%" + keyword + "%", "%" + keyword + "%"});
+        while (c.moveToNext()) {
+            String t = c.getString(0);
+            String a = c.getString(1);
+            int b = c.getInt(2);
+            list.add(new Book(t, a, b == 1));
+        }
+        c.close();
+        return list;
     }
 
-    public ArrayList<String> getBorrowHistory(String student) {
-        ArrayList<String> list = new ArrayList<>();
+    public ArrayList<BorrowHistory> getBorrowHistory(String student) {
+        ArrayList<BorrowHistory> list = new ArrayList<>();
         SQLiteDatabase db = getReadableDatabase();
         Cursor c = db.rawQuery("SELECT book, borrow_date, due_date, return_date FROM borrow_history WHERE student=? ORDER BY borrow_date DESC", new String[]{student});
         while (c.moveToNext()) {
@@ -116,8 +130,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             String bd = c.getString(1);
             String dd = c.getString(2);
             String rd = c.getString(3);
-            if (rd == null) rd = "Not returned";
-            list.add(b + " • Borrowed: " + bd + " • Due: " + dd + " • Returned: " + rd);
+            list.add(new BorrowHistory(b, bd, dd, rd));
         }
         c.close();
         return list;

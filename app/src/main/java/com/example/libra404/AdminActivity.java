@@ -2,21 +2,24 @@ package com.example.libra404;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
 public class AdminActivity extends AppCompatActivity {
     EditText etTitle, etAuthor, etDeleteTitle;
-    Button btnAdd, btnDelete, btnRefresh, btnLogout;
-    ListView listBooks;
+    Button btnAdd, btnDelete, btnRefresh;
+    RecyclerView listBooks;
     DatabaseHelper db;
+    BookAdapter bookAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,8 +34,10 @@ public class AdminActivity extends AppCompatActivity {
         btnAdd = findViewById(R.id.btnAdd);
         btnDelete = findViewById(R.id.btnDelete);
         btnRefresh = findViewById(R.id.btnRefreshA);
-        btnLogout = findViewById(R.id.btnLogoutA); // <-- new logout button
         listBooks = findViewById(R.id.listBooksA);
+
+        bookAdapter = new BookAdapter(new ArrayList<>());
+        listBooks.setAdapter(bookAdapter);
 
         btnAdd.setOnClickListener(v -> {
             String t = etTitle.getText().toString();
@@ -57,17 +62,27 @@ public class AdminActivity extends AppCompatActivity {
 
         btnRefresh.setOnClickListener(v -> loadBooks());
 
-        btnLogout.setOnClickListener(v -> {
-            startActivity(new Intent(this, LoginActivity.class));
-            finish();
-        });
-
         loadBooks();
     }
 
     private void loadBooks() {
-        ArrayList<String> list = db.getAllBooks();
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, list);
-        listBooks.setAdapter(adapter);
+        ArrayList<Book> list = db.getAllBooks();
+        bookAdapter.updateBooks(list);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_logout) {
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
