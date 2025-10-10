@@ -3,9 +3,9 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/baseline_library_books_24"
         android:label="LIBRA404"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/baseline_library_books_24"
         android:supportsRtl="true"
         android:theme="@style/Theme.Libra404">
 
