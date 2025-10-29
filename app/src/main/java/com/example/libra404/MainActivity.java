@@ -8,6 +8,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle s) {
         super.onCreate(s);
+        ThemeHelper.applyTheme(this);
         startActivity(new Intent(this, LoginActivity.class));
         finish();
     }

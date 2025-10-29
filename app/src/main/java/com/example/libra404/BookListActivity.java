@@ -5,46 +5,72 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
+import android.widget.SearchView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class HistoryActivity extends AppCompatActivity {
-    DatabaseHelper db;
-    RecyclerView listHistory;
-    Button btnBackHistory;
-    HistoryAdapter historyAdapter;
-    String currentUser;
-    String currentUserRole;
+public class BookListActivity extends AppCompatActivity {
+
+    private DatabaseHelper db;
+    private BookAdapter bookAdapter;
+    private String currentUser;
+    private String currentUserRole;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ThemeHelper.applyTheme(this);
-        setContentView(R.layout.activity_history);
+        setContentView(R.layout.activity_book_list);
 
         db = new DatabaseHelper(this);
-        listHistory = findViewById(R.id.listHistory);
-        btnBackHistory = findViewById(R.id.btnBackHistory);
-
         currentUser = getIntent().getStringExtra("student");
         currentUserRole = getIntent().getStringExtra("role");
-        ArrayList<BorrowHistory> list = db.getBorrowHistory(currentUser);
 
-        historyAdapter = new HistoryAdapter(list);
-        listHistory.setAdapter(historyAdapter);
+        RecyclerView rvBooks = findViewById(R.id.rvBooks);
+        SearchView searchView = findViewById(R.id.searchViewBooks);
 
-        btnBackHistory.setOnClickListener(v -> finish());
+        bookAdapter = new BookAdapter(new ArrayList<>());
+        rvBooks.setAdapter(bookAdapter);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                loadBooks(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                loadBooks(newText);
+                return false;
+            }
+        });
+
+        loadBooks("");
+    }
+
+    private void loadBooks(String keyword) {
+        ArrayList<Book> list;
+        if (keyword.isEmpty()) {
+            list = db.getAllBooks();
+        } else {
+            list = db.searchBooksToList(keyword);
+        }
+        bookAdapter.updateBooks(list);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
 
-        menu.findItem(R.id.action_history).setVisible(false);
+        menu.findItem(R.id.action_catalog).setVisible(false);
+
+        if ("admin".equals(currentUserRole)) {
+            menu.findItem(R.id.action_history).setVisible(false);
+        }
 
         int currentNightMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
         MenuItem themeItem = menu.findItem(R.id.action_theme);
@@ -69,14 +95,18 @@ public class HistoryActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
             return true;
-        } else if (id == R.id.action_catalog) {
-            Intent i = new Intent(this, BookListActivity.class);
+        } else if (id == R.id.action_history) {
+            Intent i = new Intent(this, HistoryActivity.class);
             i.putExtra("role", currentUserRole);
             i.putExtra("student", currentUser);
             startActivity(i);
             return true;
         } else if (id == R.id.action_home) {
-            startActivity(new Intent(this, StudentActivity.class));
+            if ("admin".equals(currentUserRole)) {
+                startActivity(new Intent(this, AdminActivity.class));
+            } else {
+                startActivity(new Intent(this, StudentActivity.class));
+            }
             return true;
         } else if (id == R.id.action_about) {
             Intent i = new Intent(this, AboutActivity.class);

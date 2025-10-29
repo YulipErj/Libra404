@@ -1,11 +1,22 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <style name="Theme.Libra404" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
-        <item name="colorPrimary">@color/md_theme_inversePrimary</item>
-        <item name="colorPrimaryVariant">@color/md_theme_primaryContainer</item>
-        <item name="colorOnPrimary">@color/md_theme_onPrimaryContainer</item>
-        <item name="colorSecondary">@color/md_theme_secondaryContainer</item>
-        <item name="colorSecondaryVariant">@color/md_theme_secondaryContainer</item>
-        <item name="colorOnSecondary">@color/md_theme_onSecondaryContainer</item>
-        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+
+        <!-- App Bar background color -->
+        <item name="colorPrimary">@color/md_theme_primary</item>
+
+        <!-- Text and icon color on App Bar -->
+        <item name="colorOnPrimary">@color/md_theme_onPrimary</item>
+
+        <!-- Body background color -->
+        <item name="android:colorBackground">@color/md_theme_background</item>
+        <item name="colorOnBackground">@color/md_theme_onBackground</item>
+
+        <!-- General surface color -->
+        <item name="colorSurface">@color/md_theme_surface</item>
+        <item name="colorOnSurface">@color/md_theme_onSurface</item>
+
+        <!-- Status bar color -->
+        <item name="android:statusBarColor">?attr/colorPrimary</item>
+
     </style>
 </resources>

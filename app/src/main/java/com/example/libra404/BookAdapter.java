@@ -1,10 +1,12 @@
 package com.example.libra404;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -29,6 +31,14 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
         holder.tvBookTitle.setText(book.getTitle());
         holder.tvBookAuthor.setText(book.getAuthor());
         holder.tvBookStatus.setText(book.isBorrowed() ? "Borrowed" : "Available");
+
+        if (book.isBorrowed()) {
+            holder.tvBookTitle.setCompoundDrawablesWithIntrinsicBounds(R.drawable.baseline_bookmark_24, 0, 0, 0);
+            holder.tvBookTitle.getCompoundDrawables()[0].setTint(Color.GREEN);
+        } else {
+            holder.tvBookTitle.setCompoundDrawablesWithIntrinsicBounds(R.drawable.baseline_library_books_24, 0, 0, 0);
+            holder.tvBookTitle.getCompoundDrawables()[0].setTintList(null);
+        }
     }
 
     @Override

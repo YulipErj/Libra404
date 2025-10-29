@@ -57,7 +57,8 @@
         android:text="Login"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tilPass" />
+        app:layout_constraintTop_toBottomOf="@+id/tilPass"
+        app:layout_constraintBottom_toTopOf="@+id/btnRegister" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnRegister"
@@ -67,6 +68,7 @@
         android:text="Register"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnLogin" />
+        app:layout_constraintTop_toBottomOf="@+id/btnLogin"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

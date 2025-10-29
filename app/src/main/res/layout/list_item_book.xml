@@ -9,6 +9,9 @@
         android:id="@+id/tvBookTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:drawableStart="@drawable/baseline_library_books_24"
+        android:drawablePadding="8dp"
+        android:gravity="center_vertical"
         android:textSize="16sp"
         android:textStyle="bold" />
 
@@ -16,12 +19,14 @@
         android:id="@+id/tvBookAuthor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
         android:layout_marginTop="4dp" />
 
     <TextView
         android:id="@+id/tvBookStatus"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
         android:layout_marginTop="4dp" />
 
 </LinearLayout>
